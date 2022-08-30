@@ -1,0 +1,46 @@
+<div class="container-fluid">
+  <div class="row card-align">
+    <div class="col-4"></div>
+    <div class="col-4 card-border">
+
+
+      <div class="container-fluid" style="padding: 0px;">
+
+        <div class="row">
+          <div class="col">
+            <div class="text-center">
+              <h3>Error</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="text-center" style="margin-top: 60px;">
+              <img src="./../../../assets/cancelar.png" alt="" height="100px">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="text-center" style="margin-top: 60px;">
+              <p>{{ errorDesc }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="id != 0">
+          <div class="col">
+            <div class="text-center" style="margin-top:60px; margin-bottom: 60px;">
+              <button class="btn botones" (click)="volver()">Volver</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+</div>

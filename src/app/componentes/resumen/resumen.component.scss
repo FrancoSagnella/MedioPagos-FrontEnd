@@ -1,0 +1,44 @@
+.resumen{
+  // padding: 300px;
+  border-radius: 1%;
+  border-style: solid;
+  border-color: rgb(204, 204, 204);
+  padding-bottom: 10px;
+  margin-bottom: 50px;
+}
+
+h4{
+  margin-left: 20px;
+  margin-top: 10px;
+}
+hr{
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+p{
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+.nombre-prod{
+  // font-size: 15px;
+  font-weight: bold;
+}
+.cantidad-prod{
+  font-size: 12px;
+}
+.precio-prod{
+  font-size: 20px;
+}
+.precio-total{
+  font-size: 20px;
+  font-weight: bold;
+}
+.borde{
+  border-bottom: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: rgb(204, 204, 204);
+  padding-bottom: 10px;
+}

@@ -1,0 +1,35 @@
+/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: 'Gilory-Bold';
+  src: url('./assets/Gilroy Family/Radomir Tinkov - Gilroy-Bold.otf');
+}
+
+@font-face {
+  font-family: 'Gilory-Regular';
+  src: url('./assets/Gilroy Family/Radomir Tinkov - Gilroy-Regular.otf');
+}
+
+h1, h2, h3, h4, h5, h6{
+  font-family:"Gilory-Bold";
+}
+
+p, button, label, a{
+  font-family: "Gilory-Regular";
+}
+
+.azul-correo{
+  background-color: #152663;
+}
+
+.amarillo-correo{
+  background-color: #FFCE00;
+}
+
+.botones{
+  background-color: #152663;
+  color:white;
+}
+.botones:hover{
+  background-color: #FFCE00;
+  color:black;
+}

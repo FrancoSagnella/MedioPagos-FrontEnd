@@ -1,0 +1,56 @@
+  <h1 class="titulo">Correo Pagos</h1>
+  <div class="container-fluid">
+    <div class="row">
+
+          <div class="col-lg-4 offset-lg-2 ">
+            <p>Método de pago</p>
+            <hr>
+            <div class="container-fluid selector">
+              <div class="row">
+                <div class="col">
+
+                  <p style="margin-top: 15px;"> <input type="radio" id="decidir" name="elegir" (click)="elegirMedio('decidir')"> Tarjetas de debito y credito (promociones bancarias y cuotas sin interes)</p>
+
+                  <!-- COMPONENTE QUE SEA EL FORMULARIO -->
+                  <div *ngIf="mostrarForm">
+                    <app-form-decidir [pago]="pago"></app-form-decidir>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <p> <input type="radio" id="mercadopago" name="elegir" (click)="elegirMedio('mercadopago')"> Mercado Pago</p>
+
+                  <div *ngIf="mostrarMercadoPago">
+                    <app-form-mercado-pago [productos]="productos" [pago]="pago" [consumidor]="consumidor"></app-form-mercado-pago>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- COMPONENTE QUE SEA EL RESUMEN -->
+          <div class="col-lg-4">
+            <br>
+            <br>
+            <app-resumen [productos]="productos" [pago]="pago" [consumidor]="consumidor"></app-resumen>
+          </div>
+
+    </div>
+    <div class="row">
+      <div class="col-lg-10">
+        <div class="float-right">
+          <button class="btn botones" (click)="cancelarPago()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+    <!-- <div *ngIf="pago">
+      <p>ID: {{id}}</p>
+      <p>EMPRESA: {{pago.empresa}}</p>
+      <p>PRECIO TOTAL: {{pago.precio_total}}</p>
+    </div> -->
+
+  </div>

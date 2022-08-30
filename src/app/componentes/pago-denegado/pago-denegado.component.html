@@ -1,0 +1,39 @@
+
+      <div class="container-fluid" style="padding: 0px;">
+
+        <div class="row">
+          <div class="col">
+            <div class="text-center">
+              <h3>Pago Rechazado</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="text-center" style="margin-top: 60px;">
+              <img src="../../../assets/cancelar.png" alt="" height="100px">
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="idError != 0">
+          <div class="col">
+            <div class="text-center" style="margin-top: 60px;">
+              <h4>{{ error }}</h4>
+              <p>{{ errorDesc }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="text-center" style="margin-top:60px; margin-bottom: 60px;">
+              <button class="btn botones" (click)="cancelarPago()">Cancelar</button>
+              &nbsp;
+              <button class="btn botones" (click)="volverIntentar()">Volver a Intentar</button>
+            </div>
+          </div>
+        </div>
+
+      </div>

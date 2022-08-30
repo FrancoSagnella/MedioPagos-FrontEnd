@@ -1,0 +1,12 @@
+<div class="container-fluid">
+  <div class="row card-align">
+    <div class="col-4"></div>
+    <div class="col-4 card-border">
+
+      <app-pago-confirmado [idPago]="id" *ngIf="estado === 'aprobado'"></app-pago-confirmado>
+
+      <app-pago-denegado [idPago]="id" [idError]="error" *ngIf="estado === 'rechazado'"></app-pago-denegado>
+
+    </div>
+  </div>
+</div>

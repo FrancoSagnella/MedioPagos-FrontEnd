@@ -1,0 +1,96 @@
+<form>
+  <div class="row">
+    <div class="col">
+      Medios de Pago disponibles
+      <select name="mediosPago" class="form-select form-select-md mb-3" name="medio_pago" [(ngModel)]="medio_pago">
+        <option ngValue="1">Visa</option>
+        <option ngValue="104">MasterCard</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      Tu nombre en la tarjeta
+      <input type="text" class="form-control" required name="card_holder_name" [(ngModel)]="card_holder_name">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      Tu DNI
+      <input type="text" class="form-control" required name="number" [(ngModel)]="number">
+    </div>
+  </div>
+
+  <div class="row ">
+    <div class="col">
+      El número en tu tarjeta
+      <input type="text" class="form-control" required name="card_number" [(ngModel)]="card_number">
+    </div>
+  </div>
+  <div class="row align-items-start">
+    <div class="col">
+      Mes de exp.
+      <select class="form-select form-select-md mb-3" name="card_expiration_month" [(ngModel)]="card_expiration_month">
+        <option ngValue="01">Enero</option>
+        <option ngValue="02">Febrero</option>
+        <option ngValue="03">Marzo</option>
+        <option ngValue="04">Abril</option>
+        <option ngValue="05">Mayo</option>
+        <option ngValue="06">Junio</option>
+        <option ngValue="07">Julio</option>
+        <option ngValue="08">Agosto</option>
+        <option ngValue="09">Septiembre</option>
+        <option ngValue="10">Octubre</option>
+        <option ngValue="11">Noviembre</option>
+        <option ngValue="12">Diciembre</option>
+      </select>
+    </div>
+    <div class="col">
+      Año de exp.
+      <select class="form-select form-select-md mb-3" name="card_expiration_year" [(ngModel)]="card_expiration_year">
+        <option *ngFor="let anio of anios" ngValue="{{ anio.slice(2) }}">{{anio}}</option>
+      </select>
+    </div>
+    <div class="col">
+      Código de seguridad
+      <input type="text" class="form-control" required name="security_code" [(ngModel)]="security_code">
+    </div>
+  </div>
+
+  <!-- <div class="row">
+    <div class="col">
+      Cuotas disponibles
+      <select name="cuotas" class="form-select form-select-md mb-3">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+        <option>11</option>
+        <option>12</option>
+      </select>
+    </div>
+  </div> -->
+
+  <div class="col">
+    <div class="float-right">
+      <p>Al continuar, aceptas nuestros Términos y Condiciones <button class="btn botones"
+          (click)="pagar()">PAGAR</button></p>
+    </div>
+  </div>
+  <br><br>
+  <div class="col alert alert-warning" *ngIf="errorMessage != ''">
+    <p>{{errorMessage}}</p>
+    <button type="button" class="close" (click)="cerrarError()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+</form>

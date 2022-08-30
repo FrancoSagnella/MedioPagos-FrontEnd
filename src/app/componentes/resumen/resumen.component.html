@@ -1,0 +1,42 @@
+<div class="resumen">
+  <h4>Resumen</h4>
+  <hr>
+
+  <div class="container-fluid">
+    <div class="row borde">
+      <div class="col-6">
+        <p class="nombre-prod">Consumidor: </p>
+      </div>
+      <div class="col-4">
+        <div class="float-right"><p *ngIf="pago">{{consumidor.nombre}}</p></div>
+      </div>
+    </div>
+    <p class="nombre-prod">Subtotal</p>
+    <!-- Se va a iterar -->
+    <div *ngIf="productos">
+      <div class="row align-items-end borde" *ngFor="let i of productos">
+        <div class="col-6">
+          <p class="">{{i.nombre_producto}}</p>
+          <p class="cantidad-prod">{{i.cantidad}} productos</p>
+        </div>
+        <div class="col-4 offset-1">
+          <div class="float-right"><p class="precio-prod">{{i.precio_unitario * i.cantidad | currency}}</p></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div *ngIf="pago">
+      <div class="row align-items-end">
+        <div class="col-6">
+          <p class="nombre-prod">Total</p>
+          <p class="cantidad-prod">{{ getCantidadTotal() }} Productos</p>
+        </div>
+        <div class="col-4 offset-1">
+          <div class="float-right"><p class="precio-total">{{pago.precioTotal | currency}}</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
