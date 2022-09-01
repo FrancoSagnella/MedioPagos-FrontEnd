@@ -1,13 +1,27 @@
-function configBricks(){
+var cardForm;
 
-  const bricksBuilder = mp.bricks();
+var bricksBuilder;
+var renderCardPaymentBrick;
+var settings;
+var cardPaymentBrickController;
 
-  const renderCardPaymentBrick = async (bricksBuilder) => {
+function configBricks(idPago, precioTotal, idPreferencia){
 
-    const settings = {
+  //PARA USAR EL BRICK, ES MAS FACIL, ESTA LINDO DE ENTRADA
+  bricksBuilder = mp.bricks();
+
+  renderCardPaymentBrick = async (bricksBuilder) => {
+
+    settings = {
       initialization: {
-        amount: 100, //valor del pago a realizar
+        amount: precioTotal, //valor del pago a realizar
       },
+      customization: {
+        paymentMethods: {
+            maxInstallments: 1,
+        },
+      },
+
       callbacks: {
         onReady: () => {
           // callback llamado cuando Brick esté listo
@@ -17,7 +31,8 @@ function configBricks(){
 
           // ejemplo de envío de los datos recolectados por el Brick a su servidor
           return new Promise((resolve, reject) => {
-              fetch("/process_payment", {
+            console.log(cardFormData);
+              fetch("http://localhost:8080/api/pagos/MercadoPago/process_payment/"+idPago, {
                   method: "POST",
                   headers: {
                       "Content-Type": "application/json",
@@ -26,78 +41,33 @@ function configBricks(){
               })
               .then((response) => {
                   // recibir el resultado del pago
+                  console.log(response);
                   resolve();
               })
               .catch((error) => {
                   // tratar respuesta de error al intentar crear el pago
+                  console.log(error);
                   reject();
               })
             });
         },
         onError: (error) => {
           // callback llamado para todos los casos de error de Brick
+          console.log(error);
         },
       },
+
     };
-    const cardPaymentBrickController = await bricksBuilder.create('cardPayment', 'cardPaymentBrick_container', settings);
+   cardPaymentBrickController = await bricksBuilder.create('cardPayment', 'cardPaymentBrick_container', settings);
   };
   renderCardPaymentBrick(bricksBuilder);
 
 
 
-  // const renderPaymentBrick = async (bricksBuilder) => {
-  //   const settings = {
-  //     initialization: {
-  //       amount: 100, // valor del pago a realizar
-  //     },
-  //     customization: {
-  //       paymentMethods: {
-  //         creditCard: 'all',
-  //         debitCard: 'all',
-  //       },
-  //     },
-  //     callbacks: {
-  //       onReady: () => {
-  //         // callback llamado cuando Brick esté listo
-  //       },
-  //       onSubmit: ({ paymentType, formData }) => {
-  //         // callback llamado cuando el usuario haz clic en el botón enviar los datos
 
-  //         if (paymentType === 'credit_card' || paymentType === 'debit_card') {
-  //           return new Promise((resolve, reject) => {
-  //             fetch("/processar-pago", {
-  //               method: "POST",
-  //               headers: {
-  //                 "Content-Type": "application/json",
-  //               },
-  //               body: JSON.stringify(formData)
-  //             })
-  //               .then((response) => {
-  //                 // recibir el resultado del pago
-  //                 resolve();
-  //               })
-  //               .catch((error) => {
-  //                 // tratar respuesta de error al intentar crear el pago
-  //                 reject();
-  //               })
-  //           });
-  //         }
-  //       },
-  //       onError: (error) => {
-  //         // callback llamado para todos los casos de error de Brick
-  //       },
-  //     },
-  //   };
-  //   window.paymentBrickController = await bricksBuilder.create(
-  //     'payment',
-  //     'paymentBrick_container',
-  //     settings
-  //   );
-  //  };
-  //  renderPaymentBrick(bricksBuilder);
-
-  // const cardForm = mp.cardForm({
-  //   amount: "100.5",
+  //PARA USAR CARD FORM, PERO EL SDK DE JAVA NO ME LO DEJA USAR, Y NO SE COMO CUSTOMIZAR EL FORM
+  // cardForm = mp.cardForm({
+  //   amount: ''+precioTotal,
   //   iframe: true,
   //   form: {
   //     id: "form-checkout",
@@ -157,9 +127,9 @@ function configBricks(){
   //         identificationType,
   //       } = cardForm.getCardFormData();
 
-  //       console.log(token);
+  //       console.log(payment_method_id, issuer_id, email, amount, token, installments, identificationNumber, identificationType);
 
-  //       fetch("/process_payment", {
+  //       fetch("http://localhost:8080/api/pagos/MercadoPago/process_payment/"+idPago, {
   //         method: "POST",
   //         headers: {
   //           "Content-Type": "application/json",
@@ -195,4 +165,22 @@ function configBricks(){
   //   },
   // });
 
+
+  //PARA USAR BILLETERA MP (ES MEDIO CHOTO, ABRE UN MODAL QUE ENTIENDO QUE ES LO MISMO QUE COMO VENIMOS HACIENDO)
+  mp.checkout({
+    preference: {
+      id: idPreferencia
+    },
+    render: {
+      container: '.cho-container',
+      label: 'Pagar com Mercado Pago',
+      type: 'wallet',
+    }
+  });
+}
+
+function unset()
+{
+  // cardForm.unmount();
+  cardPaymentBrickController.unmount();
 }

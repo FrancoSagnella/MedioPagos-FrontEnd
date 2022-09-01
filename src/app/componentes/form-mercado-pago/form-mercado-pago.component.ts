@@ -1,23 +1,32 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 declare var configBricks:any;
+declare var unset:any;
 
 @Component({
   selector: 'app-form-mercado-pago',
   templateUrl: './form-mercado-pago.component.html',
   styleUrls: ['./form-mercado-pago.component.scss'],
 })
-export class FormMercadoPagoComponent implements OnInit {
+export class FormMercadoPagoComponent implements OnInit, OnDestroy {
   @Input() productos: any[] = [];
   @Input() pago: any;
   @Input() consumidor: any;
+  // @Input() idPreferencia:any;
 
   constructor(private http: HttpClient, private route:Router) {}
 
   ngOnInit(): void {
-    configBricks();
+    // console.log(this.idPreferencia);
+    // configBricks(this.pago.id, this.pago.precioTotal, this.idPreferencia);
+    configBricks(this.pago.id, this.pago.precioTotal);
+
+  }
+
+  ngOnDestroy(): void {
+    unset();
   }
 
   pagar() {

@@ -24,6 +24,7 @@
                   <p> <input type="radio" id="mercadopago" name="elegir" (click)="elegirMedio('mercadopago')"> Mercado Pago</p>
 
                   <div *ngIf="mostrarMercadoPago">
+                    <!-- <app-form-mercado-pago [idPreferencia]="idPreferencia" [productos]="productos" [pago]="pago" [consumidor]="consumidor"></app-form-mercado-pago> -->
                     <app-form-mercado-pago [productos]="productos" [pago]="pago" [consumidor]="consumidor"></app-form-mercado-pago>
                   </div>
                 </div>

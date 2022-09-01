@@ -16,6 +16,7 @@ export class PrincipalComponent implements OnInit {
   pago:any;
   consumidor:any;
   productos:any;
+  idPreferencia:any;
 
   constructor(private activatedRoute:ActivatedRoute, private http:HttpClient, private route:Router) { }
 
@@ -27,12 +28,15 @@ export class PrincipalComponent implements OnInit {
     }
 
 
-    // let sub = this.http.get('http://localhost:8080/api/pagos/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}}).subscribe((data:any) => {
-    let sub = this.http.get('https://medio-pagos.herokuapp.com/api/pagos/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}}).subscribe((data:any) => {
+    let sub = this.http.get('http://localhost:8080/api/pagos/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}}).subscribe((data:any) => {
+    // let sub = this.http.get('https://medio-pagos.herokuapp.com/api/pagos/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}}).subscribe((data:any) => {
       console.log(data);
       this.pago = data.pago;
       this.consumidor = data.consumidor;
       this.productos = data.producto;
+
+      // this.crearPreferencia();
+
       sub.unsubscribe();
     },
     (err) => {
@@ -46,6 +50,8 @@ export class PrincipalComponent implements OnInit {
 
       sub.unsubscribe();
     });
+
+
 
   }
 
@@ -62,8 +68,8 @@ export class PrincipalComponent implements OnInit {
   }
 
   cancelarPago(){
-    // let sub = this.http.get('http://localhost:8080/api/pagos/cancelar_pago/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}})
-    let sub = this.http.get('https://medio-pagos.herokuapp.com/api/pagos/cancelar_pago/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}})
+    let sub = this.http.get('http://localhost:8080/api/pagos/cancelar_pago/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}})
+    // let sub = this.http.get('https://medio-pagos.herokuapp.com/api/pagos/cancelar_pago/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}})
     .subscribe(
       {
         next: (data:any) => {
@@ -80,5 +86,36 @@ export class PrincipalComponent implements OnInit {
           }
         }
     })
+  }
+
+  crearPreferencia()
+  {
+    let body: any = {
+      title: this.consumidor.nombre,
+      description: null,
+      pictureUrl: null,
+      categoriId: null,
+      quantity: 1,
+      unitPrice: this.pago.precioTotal,
+      currencyId: 'ARS',
+    };
+    this.http.post('http://localhost:8080/api/pagos/MercadoPago/creates/'+this.pago.id, body, {headers:{"Content-Type":"application/json"}})
+    // this.http.post('https://medio-pagos.herokuapp.com/api/pagos/MercadoPago/creates/' + this.pago.id,body,{ headers: { 'Content-Type': 'application/json' } })
+      .subscribe({
+
+      next: (data: any) => {
+        console.log(data);
+        this.idPreferencia = data.id;
+        // window.location.href = data.sandboxInitPoint;
+      },
+
+      error: err => {
+        // Error del middleware (pago vencido o ya notificado)
+        if(err.status == 409)
+        {
+          this.route.navigateByUrl('error/'+this.pago.id+'/'+err.error.type);
+        }
+      }
+      });
   }
 }
