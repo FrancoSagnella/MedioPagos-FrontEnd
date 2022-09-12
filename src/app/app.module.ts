@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -16,6 +16,9 @@ import { PagoDenegadoComponent } from './componentes/pago-denegado/pago-denegado
 import { SieComponent } from './paginas/sie/sie.component'
 import { FormsModule } from '@angular/forms';
 import { ErrorComponent } from './paginas/error/error.component';
+import { SpinnerComponent } from './servicios/spinner/spinner.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -30,14 +33,18 @@ import { ErrorComponent } from './paginas/error/error.component';
     PagoConfirmadoComponent,
     PagoDenegadoComponent,
     SieComponent,
-    ErrorComponent
+    ErrorComponent,
+    SpinnerComponent
   ],
   imports: [
     FormsModule,
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    NgxSpinnerModule
   ],
+  schemas:[CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
   bootstrap: [AppComponent]
 })

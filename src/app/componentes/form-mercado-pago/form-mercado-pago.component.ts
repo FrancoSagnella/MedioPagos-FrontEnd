@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 declare var configBricks:any;
 
@@ -14,13 +16,40 @@ export class FormMercadoPagoComponent implements OnInit {
   @Input() pago: any;
   @Input() consumidor: any;
 
-  constructor(private http: HttpClient, private route:Router) {}
+  constructor(private http: HttpClient, private route:Router, private spinner:NgxSpinnerService) {}
 
   ngOnInit(): void {
-    configBricks();
+    // configBricks();
   }
 
   pagar() {
+
+    //Modal para confirmar
+    Swal.fire({
+      title: '¿Seguro que quiere continuar?',
+      text: 'Una vez efectuado el pago, no se realizarán reembolsos',
+      showCancelButton: true,
+      confirmButtonText: 'Continuar',
+      confirmButtonColor: '#152663',
+      cancelButtonText: 'Cancelar',
+      cancelButtonColor: 'rgb(183, 0, 0)',
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        //Si se confirma el modal, se ejecuta el pago
+        this.ejecutarPago();
+
+      }
+    })
+
+
+  }
+
+  ejecutarPago()
+  {
+    this.spinner.show();
+
     let body: any = {
       title: this.consumidor.nombre,
       description: null,
@@ -31,12 +60,15 @@ export class FormMercadoPagoComponent implements OnInit {
       currencyId: 'ARS',
     };
     // this.http.post('http://localhost:8080/api/pagos/MercadoPago/creates/'+this.pago.id, body, {headers:{"Content-Type":"application/json"}})
-    this.http.post('https://medio-pagos.herokuapp.com/api/pagos/MercadoPago/creates/' + this.pago.id,body,{ headers: { 'Content-Type': 'application/json' } })
+    let sub = this.http.post('https://medio-pagos.herokuapp.com/api/pagos/MercadoPago/creates/' + this.pago.id,body,{ headers: { 'Content-Type': 'application/json' } })
       .subscribe({
 
       next: (data: any) => {
         console.log(data.sandboxInitPoint);
         window.location.href = data.sandboxInitPoint;
+
+        this.spinner.hide();
+        sub.unsubscribe();
       },
 
       error: err => {
@@ -45,7 +77,11 @@ export class FormMercadoPagoComponent implements OnInit {
         {
           this.route.navigateByUrl('error/'+this.pago.id+'/'+err.error.type);
         }
+
+        this.spinner.hide();
+        sub.unsubscribe();
       }
       });
+
   }
 }

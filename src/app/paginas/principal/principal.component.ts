@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 // import { HttpService } from 'src/app/servicios/http.service';
 
 @Component({
@@ -17,15 +20,17 @@ export class PrincipalComponent implements OnInit {
   consumidor:any;
   productos:any;
 
-  constructor(private activatedRoute:ActivatedRoute, private http:HttpClient, private route:Router) { }
+  constructor(private activatedRoute:ActivatedRoute, private http:HttpClient, private route:Router, private spinner:NgxSpinnerService) { }
 
   ngOnInit(): void {
+
+    this.spinner.show();
+
     //Si no trajo id en la url
     if(this.id === null)
     {
       this.route.navigateByUrl('error/0/url');
     }
-
 
     // let sub = this.http.get('http://localhost:8080/api/pagos/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}}).subscribe((data:any) => {
     let sub = this.http.get('https://medio-pagos.herokuapp.com/api/pagos/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}}).subscribe((data:any) => {
@@ -33,6 +38,8 @@ export class PrincipalComponent implements OnInit {
       this.pago = data.pago;
       this.consumidor = data.consumidor;
       this.productos = data.producto;
+
+      this.spinner.hide();
       sub.unsubscribe();
     },
     (err) => {
@@ -44,6 +51,7 @@ export class PrincipalComponent implements OnInit {
         this.route.navigateByUrl('error/'+this.id+'/'+err.error.type);
       }
 
+      this.spinner.hide();
       sub.unsubscribe();
     });
 
@@ -62,23 +70,50 @@ export class PrincipalComponent implements OnInit {
   }
 
   cancelarPago(){
-    // let sub = this.http.get('http://localhost:8080/api/pagos/cancelar_pago/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}})
-    let sub = this.http.get('https://medio-pagos.herokuapp.com/api/pagos/cancelar_pago/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}})
-    .subscribe(
-      {
-        next: (data:any) => {
-          console.log(data);
-          window.location.href = data.url;
-          sub.unsubscribe();
-        },
 
-        error: err => {
-          // Error del middleware (pago vencido o ya notificado)
-          if(err.status == 409)
+    //Modal para confirmar
+    Swal.fire({
+      title: '¿Seguro que quiere continuar?',
+      text: 'Se cancelará el proceso del pago',
+      showCancelButton: true,
+      confirmButtonText: 'Continuar',
+      confirmButtonColor: '#152663',
+      cancelButtonText: 'Cancelar',
+      cancelButtonColor: 'rgb(183, 0, 0)',
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.spinner.show();
+
+        //Si se confirma el modal, se cancela el pago
+        // let sub = this.http.get('http://localhost:8080/api/pagos/cancelar_pago/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}})
+        let sub = this.http.get('https://medio-pagos.herokuapp.com/api/pagos/cancelar_pago/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}})
+        .subscribe(
           {
-            this.route.navigateByUrl('error/'+this.id+'/'+err.error.type);
-          }
-        }
+            next: (data:any) => {
+              console.log(data);
+              window.location.href = data.url;
+
+              this.spinner.hide();
+              sub.unsubscribe();
+            },
+
+            error: err => {
+              // Error del middleware (pago vencido o ya notificado)
+              if(err.status == 409)
+              {
+                this.route.navigateByUrl('error/'+this.id+'/'+err.error.type);
+              }
+
+              this.spinner.hide();
+              sub.unsubscribe();
+            }
+        })
+
+      }
     })
+
+
   }
 }

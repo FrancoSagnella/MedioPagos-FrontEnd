@@ -2,6 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { erroresDecidir } from 'src/app/errores';
+import Swal from 'sweetalert2';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 
 @Component({
   selector: 'app-form-decidir',
@@ -23,7 +26,7 @@ export class FormDecidirComponent implements OnInit {
   type:any = "dni";
   number:any;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private spinner:NgxSpinnerService) {}
 
   ngOnInit(): void {
     this.fillAnios();
@@ -31,6 +34,31 @@ export class FormDecidirComponent implements OnInit {
   }
 
   pagar() {
+
+    //Modal para confirmar
+    Swal.fire({
+      title: '¿Seguro que quiere continuar?',
+      text: 'Una vez efectuado el pago, no se realizarán reembolsos',
+      showCancelButton: true,
+      confirmButtonText: 'Continuar',
+      confirmButtonColor: '#152663',
+      cancelButtonText: 'Cancelar',
+      cancelButtonColor: 'rgb(183, 0, 0)',
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        //Si se confirma modal, se ejecuta el pago
+        this.ejecutarPago();
+
+      }
+    })
+  }
+
+  ejecutarPago()
+  {
+    this.spinner.show();
+
     let body: any = {
       card_number: this.card_number,
       card_expiration_month: this.card_expiration_month,
@@ -44,9 +72,7 @@ export class FormDecidirComponent implements OnInit {
       medio_pago: this.medio_pago,
     };
 
-    // console.log(body);
-
-    this.http
+    let sub = this.http
       // .post('http://localhost:8080/api/pagos/decidir/token/' + this.pago.id, body,{ headers: { 'Content-Type': 'application/json' } })
       .post('https://medio-pagos.herokuapp.com/api/pagos/decidir/token/' + this.pago.id, body,{ headers: { 'Content-Type': 'application/json' } })
       .subscribe({
@@ -62,6 +88,9 @@ export class FormDecidirComponent implements OnInit {
             this.router.navigateByUrl('confirmacion/rechazado/'+this.pago.id+'/'+data.status_details.error.reason.id);
           }
 
+          this.spinner.hide();
+          sub.unsubscribe();
+
         },
         // SI LA PETICION TIRA ALGUN ERROR EN ALGUN MOMENTO, ENTRA ACA
         error: error => {
@@ -75,6 +104,9 @@ export class FormDecidirComponent implements OnInit {
           let errorIndex = error.error.error_type + '-' + error.error.validation_errors[0].code + '-' + error.error.validation_errors[0].param;
           console.log(errorIndex);
           this.errorMessage = erroresDecidir[errorIndex].desc;
+
+          this.spinner.hide();
+          sub.unsubscribe();
         }
 
       });
