@@ -73,17 +73,17 @@ export class FormDecidirComponent implements OnInit {
     };
 
     let sub = this.http
-      // .post('http://localhost:8080/api/pagos/decidir/token/' + this.pago.id, body,{ headers: { 'Content-Type': 'application/json' } })
-      .post('https://medio-pagos.herokuapp.com/api/pagos/decidir/token/' + this.pago.id, body,{ headers: { 'Content-Type': 'application/json' } })
+      .post('http://localhost:8080/api/pagos/decidir/token/' + this.pago.id, body,{ headers: { 'Content-Type': 'application/json' } })
+      // .post('https://medio-pagos.herokuapp.com/api/pagos/decidir/token/' + this.pago.id, body,{ headers: { 'Content-Type': 'application/json' } })
       .subscribe({
         // SI LA PETICION SE CONCRETA BIEN, Y EL PAGO SE HACE BIEN, ENTRA ACA Y PUEDE ESTAR APROBADO O RECHAZADO
         next: (data:any) => {
-
+          console.info(data);
           if(data.status == 'approved')
           {
             this.router.navigateByUrl('confirmacion/aprobado/'+this.pago.id+'/0');
           }
-          else if(data.status == 'rejected')
+          else if(data.status == 'rejected' || data.status == 'review')
           {
             this.router.navigateByUrl('confirmacion/rechazado/'+this.pago.id+'/'+data.status_details.error.reason.id);
           }
@@ -94,7 +94,6 @@ export class FormDecidirComponent implements OnInit {
         },
         // SI LA PETICION TIRA ALGUN ERROR EN ALGUN MOMENTO, ENTRA ACA
         error: error => {
-
           // Error del middleware (pago vencido o ya notificado)
           if(error.status == 409)
           {
