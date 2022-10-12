@@ -16,7 +16,13 @@ export class FormMercadoPagoComponent implements OnInit {
   @Input() pago: any;
   @Input() consumidor: any;
 
-  constructor(private http: HttpClient, private route:Router, private spinner:NgxSpinnerService) {}
+  public funcion = () => {
+    return 'hola';
+  }
+
+  constructor(private http: HttpClient, private route:Router, private spinner:NgxSpinnerService) {
+    console.log(this.funcion());
+  }
 
   ngOnInit(): void {
     // configBricks();
@@ -59,13 +65,14 @@ export class FormMercadoPagoComponent implements OnInit {
       unitPrice: this.pago.precioTotal,
       currencyId: 'ARS',
     };
-    // this.http.post('http://localhost:8080/api/pagos/MercadoPago/creates/'+this.pago.id, body, {headers:{"Content-Type":"application/json"}})
+    // let sub = this.http.post('http://localhost:8080/api/pagos/MercadoPago/creates/'+this.pago.id, body, {headers:{"Content-Type":"application/json"}})
     let sub = this.http.post('https://medio-pagos.herokuapp.com/api/pagos/MercadoPago/creates/' + this.pago.id,body,{ headers: { 'Content-Type': 'application/json' } })
       .subscribe({
 
       next: (data: any) => {
-        console.log(data.sandboxInitPoint);
-        window.location.href = data.sandboxInitPoint;
+        // console.log(data);
+        configBricks(data.id); // PARA QUE FUNCIONE CON MODAL
+        // window.location.href = data.sandboxInitPoint; // PARA QUE FUNCIONE REDIRIGIENDO
 
         this.spinner.hide();
         sub.unsubscribe();

@@ -73,8 +73,8 @@ export class FormDecidirComponent implements OnInit {
     };
 
     let sub = this.http
-      .post('http://localhost:8080/api/pagos/decidir/token/' + this.pago.id, body,{ headers: { 'Content-Type': 'application/json' } })
-      // .post('https://medio-pagos.herokuapp.com/api/pagos/decidir/token/' + this.pago.id, body,{ headers: { 'Content-Type': 'application/json' } })
+      // .post('http://localhost:8080/api/pagos/decidir/token/' + this.pago.id, body,{ headers: { 'Content-Type': 'application/json' } })
+      .post('https://medio-pagos.herokuapp.com/api/pagos/decidir/token/' + this.pago.id, body,{ headers: { 'Content-Type': 'application/json' } })
       .subscribe({
         // SI LA PETICION SE CONCRETA BIEN, Y EL PAGO SE HACE BIEN, ENTRA ACA Y PUEDE ESTAR APROBADO O RECHAZADO
         next: (data:any) => {
