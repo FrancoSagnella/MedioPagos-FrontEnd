@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { environment } from 'src/environments/environment';
 
 // import { HttpService } from 'src/app/servicios/http.service';
 
@@ -32,8 +33,7 @@ export class PrincipalComponent implements OnInit {
       this.route.navigateByUrl('error/0/url');
     }
 
-    // let sub = this.http.get('http://localhost:8080/api/pagos/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}}).subscribe((data:any) => {
-    let sub = this.http.get('https://medio-pagos.herokuapp.com/api/pagos/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}}).subscribe((data:any) => {
+    let sub = this.http.get(environment.apiUrl+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}}).subscribe((data:any) => {
       console.log(data);
       this.pago = data.pago;
       this.consumidor = data.consumidor;
@@ -87,8 +87,7 @@ export class PrincipalComponent implements OnInit {
         this.spinner.show();
 
         //Si se confirma el modal, se cancela el pago
-        // let sub = this.http.get('http://localhost:8080/api/pagos/cancelar_pago/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}})
-        let sub = this.http.get('https://medio-pagos.herokuapp.com/api/pagos/cancelar_pago/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}})
+        let sub = this.http.get(environment.apiUrl+'cancelar_pago/'+this.id, {headers: {'Access-Control-Allow-Origin':'http://localhost:4200'}})
         .subscribe(
           {
             next: (data:any) => {

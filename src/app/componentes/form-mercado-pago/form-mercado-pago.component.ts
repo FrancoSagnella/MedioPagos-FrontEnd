@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { environment } from 'src/environments/environment';
 
 declare var configBricks:any;
 
@@ -65,8 +66,7 @@ export class FormMercadoPagoComponent implements OnInit {
       unitPrice: this.pago.precioTotal,
       currencyId: 'ARS',
     };
-    // let sub = this.http.post('http://localhost:8080/api/pagos/MercadoPago/creates/'+this.pago.id, body, {headers:{"Content-Type":"application/json"}})
-    let sub = this.http.post('https://medio-pagos.herokuapp.com/api/pagos/MercadoPago/creates/' + this.pago.id,body,{ headers: { 'Content-Type': 'application/json' } })
+    let sub = this.http.post(environment.apiUrl+ 'MercadoPago/creates/' + this.pago.id,body,{ headers: { 'Content-Type': 'application/json' } })
       .subscribe({
 
       next: (data: any) => {
