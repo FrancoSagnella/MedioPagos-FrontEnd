@@ -80,7 +80,10 @@
               "browserTarget": "SIE-medio-pago:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options":{
+            "port":8080
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
