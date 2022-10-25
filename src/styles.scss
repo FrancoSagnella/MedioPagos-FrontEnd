@@ -10,11 +10,13 @@
 }
 
 h1, h2, h3, h4, h5, h6{
-  font-family:"Gilory-Bold";
+  font-family:"Gilory-Regular";
+  color: #152663;
 }
 
 p, button, label, a{
   font-family: "Gilory-Regular";
+  color: #152663;
 }
 
 .azul-correo{
@@ -23,6 +25,10 @@ p, button, label, a{
 
 .amarillo-correo{
   background-color: #FFCE00;
+}
+
+.gris-fondo{
+  background-color: #E2E8F0;
 }
 
 .botones{
