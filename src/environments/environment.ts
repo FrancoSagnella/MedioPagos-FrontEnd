@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   // apiUrl: 'https://medio-pagos.herokuapp.com/api/pagos/',
   // apiUrl: 'http://localhost:8081/api/pagos/',
-  apiUrl: 'http://10.128.2.51:8080/api/pagos/',
+  apiUrl: 'http://correo-app-backend2-correo-argentino.apps.lab.okd.local/api/pagos/',
 };
 
 /*
